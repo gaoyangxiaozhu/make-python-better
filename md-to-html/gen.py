@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # auto generate blog posts and blog nav page and doc page for PingCAP site
+# created by gyy
 
 import re
 import sys
@@ -95,6 +96,25 @@ def parse_posts(ty='blog'):
             c = fp.read().decode('utf-8')
             post = parse_post(c, ty)
 
+            ## change all path for image to '/image/xxx.png' ##
+            # re.findall(r'<img\s+?(?:alt=".*?")?\s+?src="\s*[^\s]*/([^\s]*?)\s*"\s*/>', post['content'])
+            post['content'] = re.sub(r'!\[(.*?)\]\(\s*?[^\s]*/([^\s]*?)\)', r'![\1](/images/\2)', post['content'])
+            ## change all img path end ##
+
+            # change all path for xxx.md#xxx to {doc, blog}-xxx-{zh-cn}.html#xxxx
+            if ty is 'blog':
+                if lang is 'zh':
+                    post['content'] = re.sub(r'\[(.*?)\]\(\s*?[^\s]+/([^\s]*?)\.md([^\s]*)\)', r'[\1](blog-\2-zh.html\3)', post['content'])
+                else:
+                    post['content'] = re.sub(r'\[(.*?)\]\(\s*?[^\s]+/([^\s]*?)\.md([^\s]*)\)', r'[\1](blog-\2.html\3)', post['content'])
+            else:
+                if lang is 'zh':
+                    post['content'] = re.sub(r'\[(.*?)\]\(\s*?[^\s]+/([^\s]*?)\.md([^\s]*)\)', r'[\1](doc-\2-zh.html\3)', post['content'])
+                else:
+                    post['content'] = re.sub(r'\[(.*?)\]\(\s*?[^\s]+/([^\s]*?)\.md([^\s]*)\)', r'[\1](doc-\2.html\3)', post['content'])
+            ## change all md path end ##
+
+            '''
             re_obj = re.compile(r'\[.*?\]\(((.*?)\.md#{0,1}.*?)\)')
             md_links = re_obj.findall(post['content'])
             # mdLinks eg:
@@ -108,9 +128,10 @@ def parse_posts(ty='blog'):
                 if lang is 'zh':
                     html_link += '-zh'
                 html_link = ty + '-' + html_link + '.html'
-                
+
                 md_fragement = re.findall(r'(.*\.md)#{0,1}.*?', raw_link)[0]
                 post['content'] = re.sub(re.escape(md_fragement), re.escape(html_link), post['content'])
+            '''
 
             post[ty + '_html'] = to_md(post['content']) #html content
             post['filename'] = fname.split('/')[-1].split('.md')[0]
