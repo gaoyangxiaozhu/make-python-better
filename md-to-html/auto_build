@@ -5,8 +5,8 @@ SOURCE_DOC_DIR_PATH='./doc'
 GEN_BLOG_DIR_PATH='../dist/blog'
 GEN_DOC_DIR_PATH='../dist/doc'
 
-WEBSITE_GIT_PATH='../website'
-WEBSITE_GIT_SRC_HTML_PATH='../website/src/html'
+WEBSITE_GIT_PATH='../../website'
+WEBSITE_GIT_SRC_HTML_PATH='../../website/src/html'
 
 # run gen.py create htmls for doc and blog
 

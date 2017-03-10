@@ -220,7 +220,7 @@ def gen__years(posts):
         years[create_year]['post_count'] += 1
         years[create_year][create_month]['post_count'] += 1
 
-        years[create_year][create_month]['posts'].append({'day': create_day, 'title': post['title'], 'href': post['filename']})
+        years[create_year][create_month]['posts'].append({'day': create_day, 'title': post['title'], 'href': post['html_filename']})
 
     years['ys'] = sorted(years['ys'], reverse=True)
     for year in years['ys']:
