@@ -14,8 +14,12 @@ python gen.py
 exit_code=$?
 
 # first need clean old htmls for ${WEBSITE_GIT_SRC_PATH}
-if [ -d ${WEBSITE_GIT_SRC_HTML_PATH} -a `ls ${WEBSITE_GIT_SRC_HTML_PATH}/*.html | wc -l` -ne 0 ]; then
-    rm ${WEBSITE_GIT_SRC_HTML_PATH}/*.html
+# only delete doc-*.html and blog-*.html
+if [ -d ${WEBSITE_GIT_SRC_HTML_PATH} ]; then
+    if [ `ls ${WEBSITE_GIT_SRC_HTML_PATH}/doc-*.html | wc -l` -ne 0 ]
+        rm ${WEBSITE_GIT_SRC_HTML_PATH}/doc-*.html ${WEBSITE_GIT_SRC_HTML_PATH}/doc-*.html
+    if [ `ls ${WEBSITE_GIT_SRC_HTML_PATH}/blog-*.html | wc -l` -ne 0 ]
+        rm ${WEBSITE_GIT_SRC_HTML_PATH}/blog-*.html ${WEBSITE_GIT_SRC_HTML_PATH}/blog-*.html
 fi
 
 # cp all htmls from ${GEN_*_DIR_PATH } to ${WEBSITE_GIT_SRC_HTML_PATH} if successfully created html
