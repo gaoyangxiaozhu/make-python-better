@@ -1,0 +1,45 @@
+#!/bin/bash
+
+SOURCE_BLOG_DIR_PATH='./blog'
+SOURCE_DOC_DIR_PATH='./doc'
+GEN_BLOG_DIR_PATH='../dist/blog'
+GEN_DOC_DIR_PATH='../dist/doc'
+
+WEBSITE_GIT_PATH='../../website'
+WEBSITE_GIT_SRC_HTML_PATH='../../website/src/html'
+
+# run gen.py create htmls for doc and blog
+
+python gen.py
+exit_code=$?
+
+# first need clean old htmls for ${WEBSITE_GIT_SRC_PATH}
+# only delete doc-*.html and blog-*.html
+if [ -d ${WEBSITE_GIT_SRC_HTML_PATH} ]; then
+    if [ `ls ${WEBSITE_GIT_SRC_HTML_PATH}/doc-*.html | wc -l` -ne 0 ]
+        rm ${WEBSITE_GIT_SRC_HTML_PATH}/doc-*.html ${WEBSITE_GIT_SRC_HTML_PATH}/doc-*.html
+    if [ `ls ${WEBSITE_GIT_SRC_HTML_PATH}/blog-*.html | wc -l` -ne 0 ]
+        rm ${WEBSITE_GIT_SRC_HTML_PATH}/blog-*.html ${WEBSITE_GIT_SRC_HTML_PATH}/blog-*.html
+fi
+
+# cp all htmls from ${GEN_*_DIR_PATH } to ${WEBSITE_GIT_SRC_HTML_PATH} if successfully created html
+if [ ${exit_code} -eq 0 ];then
+    for DIR in $GEN_BLOG_DIR_PATH $GEN_DOC_DIR_PATH
+        do
+            if [ -d $DIR ] && [ `ls ${DIR} | wc -l` -ne 0 ];then
+                echo cp all html files from ${DIR} to ${WEBSITE_GIT_SRC_HTML_PATH}
+                cp ${DIR}/*.html ${WEBSITE_GIT_SRC_HTML_PATH}
+                fi
+        done
+    echo 'mv over'
+else
+    echo 'gen html error..'
+    exit 1
+fi
+
+# run gulp
+if [ `ls ${WEBSITE_GIT_SRC_HTML_PATH}/*.html | wc -l` -ne 0 ];then
+    cd ${WEBSITE_GIT_PATH}
+    echo 'run gulp..'
+    gulp
+fi
