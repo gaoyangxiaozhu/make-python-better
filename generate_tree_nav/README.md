@@ -1,5 +1,5 @@
 read a tree architecrture from md:
-such as the content in **xx.md** is 
+such as the content in **xx.md** is:
 ```shell
     + category1
         - file1
@@ -26,7 +26,7 @@ such as the content in **xx.md** is
 
 then by runing `python generate_tree_nav.py`
 we can get a global_category dict which storage the total directory architecrure
-and can be using to rebuild the total directory architecture recursively
+and can be using to reproduce the total directory architecture recursively
 
 
 
